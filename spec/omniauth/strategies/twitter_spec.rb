@@ -32,7 +32,7 @@ describe OmniAuth::Strategies::Twitter do
     end
 
     it 'should returns the nickname' do
-      expect(subject.info[:nickname]).to eq(raw_info_hash['screen_name'])
+      expect(subject.info[:nickname]).to eq(raw_info_hash['username'])
     end
 
     it 'should returns the name' do
@@ -53,42 +53,7 @@ describe OmniAuth::Strategies::Twitter do
 
     it 'should returns the urls' do
       expect(subject.info[:urls]['Website']).to eq(raw_info_hash['url'])
-      expect(subject.info[:urls]['Twitter']).to eq("https://twitter.com/#{raw_info_hash['screen_name']}")
-    end
-  end
-
-  describe 'image_size option' do
-    context 'when user has an image' do
-      it 'should return image with size specified' do
-        @options = { :image_size => 'original' }
-        allow(subject).to receive(:raw_info).and_return(
-          { 'profile_image_url' => 'http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png' }
-        )
-        expect(subject.info[:image]).to eq('http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0.png')
-      end
-
-      it 'should return bigger image when bigger size specified' do
-        @options = { :image_size => 'bigger' }
-        allow(subject).to receive(:raw_info).and_return(
-          { 'profile_image_url' => 'http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png' }
-        )
-        expect(subject.info[:image]).to eq('http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_bigger.png')
-      end
-
-      it 'should return secure image with size specified' do
-        @options = { :secure_image_url => 'true', :image_size => 'mini' }
-        allow(subject).to receive(:raw_info).and_return(
-          { 'profile_image_url_https' => 'https://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png' }
-        )
-        expect(subject.info[:image]).to eq('https://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_mini.png')
-      end
-
-      it 'should return normal image by default' do
-        allow(subject).to receive(:raw_info).and_return(
-          { 'profile_image_url' => 'http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png' }
-        )
-        expect(subject.info[:image]).to eq('http://twimg0-a.akamaihd.net/sticky/default_profile_images/default_profile_0_normal.png')
-      end
+      expect(subject.info[:urls]['Twitter']).to eq("https://twitter.com/#{raw_info_hash['username']}")
     end
   end
 
@@ -191,7 +156,7 @@ private
 
 def raw_info_hash
   {
-    'screen_name' => 'foo',
+    'username' => 'foo',
     'name' => 'Foo Bar',
     'email' => 'foo@example.com',
     'location' => 'India',
